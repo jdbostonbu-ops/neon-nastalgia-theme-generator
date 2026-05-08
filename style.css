@@ -423,6 +423,23 @@ body {
 
 .selector { position: relative; }
 
+/* When a dropdown is open, lift its parent above sibling lab sections
+   so the menu can render on top of the preview and code panels below */
+.selector:has(.dropdown-menu.is-open) {
+  z-index: 200;
+}
+/* Fallback for browsers without :has() — JS adds .selector-open */
+.selector.selector-open {
+  z-index: 200;
+}
+
+/* Ensure the control panel beats the split + tokenstrip when any dropdown is up */
+.control:has(.dropdown-menu.is-open),
+.control.has-open-dropdown {
+  z-index: 150;
+  position: relative;
+}
+
 .selector-label {
   display: block;
   font-family: var(--font-mono);
@@ -1309,8 +1326,314 @@ input[type="range"]#ratio::-moz-range-thumb {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE
+   LAYER HEADER (between brand input and extras)
    ═══════════════════════════════════════════════════════════════ */
+
+.layer-header {
+  margin: 22px 0 14px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--nn-stroke);
+}
+
+.layer-sub {
+  color: var(--nn-text-dim);
+  font-size: var(--fs-sm);
+  margin-top: 6px;
+  max-width: 60ch;
+}
+
+.extras {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+/* Font dropdown swatch — show "Aa" preview */
+.dropdown-swatch-font,
+.dropdown-swatch-anim {
+  background: linear-gradient(135deg, var(--nn-cyan), var(--nn-magenta));
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  color: var(--nn-bg-1);
+  font-weight: 700;
+  text-shadow: 0 0 4px rgba(255,255,255,0.4);
+}
+
+/* font items: show font preview in their actual font */
+.dropdown-item.font-item .dropdown-item-name {
+  font-family: var(--item-font, inherit);
+  font-size: var(--fs-md);
+  letter-spacing: 0.02em;
+}
+
+/* anim items: show name with description below */
+.dropdown-item.anim-item {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  padding: 10px 12px;
+}
+
+.dropdown-item.anim-item .dropdown-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dropdown-item.anim-item .dropdown-item-desc {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--nn-text-mute);
+  letter-spacing: 0.02em;
+  padding-left: 30px;
+  margin-top: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.dropdown-item.anim-item:hover .dropdown-item-desc,
+.dropdown-item.anim-item.is-focused .dropdown-item-desc {
+  color: rgba(10, 0, 20, 0.75);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PREVIEW HINT
+   ═══════════════════════════════════════════════════════════════ */
+
+.preview-hint {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--nn-magenta);
+  text-shadow: 0 0 6px rgba(255, 16, 240, 0.5);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-smooth);
+  white-space: nowrap;
+}
+
+.preview-hint.visible { opacity: 1; }
+
+.mini-site.is-clickable {
+  cursor: pointer;
+}
+
+.mini-site.is-clickable:hover {
+  filter: brightness(1.05);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATION KEYFRAMES & UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Each animation gets a class on .mini-site or its descendants.
+   Animations re-trigger via remove → reflow → re-add pattern in JS. */
+
+/* 01 · CARD FLIP — each card flips 180° to show its back */
+.mini-site.anim-flip .ms-card {
+  transform-style: preserve-3d;
+  transition: transform 0.7s var(--ease-spring);
+  position: relative;
+  cursor: pointer;
+}
+
+.mini-site.anim-flip .ms-card-front,
+.mini-site.anim-flip .ms-card-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.mini-site.anim-flip .ms-card-back {
+  position: absolute;
+  inset: 14px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  transform: rotateY(180deg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ms-accent);
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+}
+
+.mini-site.anim-flip .ms-card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.mini-site.anim-flip .ms-card:hover {
+  box-shadow: 0 0 24px rgba(255, 16, 240, 0.35);
+}
+
+/* 02 · BURST — cards burst outward from center then settle */
+@keyframes burstOut {
+  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+  50%  { transform: translate(var(--burst-x, 0), var(--burst-y, 0)) scale(1.2); opacity: 0.7; }
+  100% { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+.mini-site.anim-burst .ms-card { animation: burstOut 0.8s var(--ease-spring); }
+.mini-site.anim-burst .ms-card:nth-child(1) { --burst-x: -40px; --burst-y: -20px; }
+.mini-site.anim-burst .ms-card:nth-child(2) { --burst-x:   0px; --burst-y: -30px; }
+.mini-site.anim-burst .ms-card:nth-child(3) { --burst-x:  40px; --burst-y: -20px; }
+
+/* 03 · SLIDE IN — hero + cards slide in from left with stagger */
+@keyframes slideInLeft {
+  from { transform: translateX(-60px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+.mini-site.anim-slide .ms-hero    { animation: slideInLeft 0.6s var(--ease-smooth) both; }
+.mini-site.anim-slide .ms-card    { animation: slideInLeft 0.6s var(--ease-smooth) both; }
+.mini-site.anim-slide .ms-card:nth-child(1) { animation-delay: 0.1s; }
+.mini-site.anim-slide .ms-card:nth-child(2) { animation-delay: 0.2s; }
+.mini-site.anim-slide .ms-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* 04 · FADE IN UP — everything fades + rises */
+@keyframes fadeInUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.mini-site.anim-fade .ms-hero,
+.mini-site.anim-fade .ms-cards,
+.mini-site.anim-fade .ms-header,
+.mini-site.anim-fade .ms-footer {
+  animation: fadeInUp 0.7s var(--ease-smooth) both;
+}
+.mini-site.anim-fade .ms-header { animation-delay: 0.05s; }
+.mini-site.anim-fade .ms-hero   { animation-delay: 0.15s; }
+.mini-site.anim-fade .ms-cards  { animation-delay: 0.3s; }
+.mini-site.anim-fade .ms-footer { animation-delay: 0.45s; }
+
+/* 05 · LETTER DROP — title letters drop in from above */
+@keyframes letterDrop {
+  0%   { transform: translateY(-60px) rotate(-6deg); opacity: 0; }
+  60%  { transform: translateY(8px)   rotate(2deg);  opacity: 1; }
+  100% { transform: translateY(0)     rotate(0);     opacity: 1; }
+}
+/* When letter animations are active, disable the gradient text-clip on the
+   parent so the individual letter spans render as solid visible text. */
+.mini-site.anim-drop .ms-title,
+.mini-site.anim-wave .ms-title {
+  background: none;
+  -webkit-text-fill-color: var(--ms-text);
+  color: var(--ms-text);
+}
+.mini-site.anim-drop .ms-title .letter {
+  display: inline-block;
+  color: var(--ms-text);
+  -webkit-text-fill-color: var(--ms-text);
+  animation: letterDrop 0.6s var(--ease-spring) both;
+}
+
+/* 06 · LETTER WAVE — letters wave up and down in sequence */
+@keyframes letterWave {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+.mini-site.anim-wave .ms-title .letter {
+  display: inline-block;
+  color: var(--ms-accent);
+  -webkit-text-fill-color: var(--ms-accent);
+  animation: letterWave 1s var(--ease-smooth) infinite;
+  animation-delay: var(--letter-delay, 0ms);
+}
+
+/* 07 · GLITCH — RGB-split chromatic aberration */
+@keyframes glitchShake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2px, 1px); }
+  20% { transform: translate(2px, -1px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(1px, -2px); }
+  50% { transform: translate(-2px, -1px); }
+  60% { transform: translate(2px, 1px); }
+  70% { transform: translate(-1px, -2px); }
+  80% { transform: translate(1px, 2px); }
+  90% { transform: translate(-2px, 1px); }
+}
+.mini-site.anim-glitch .ms-title {
+  position: relative;
+  animation: glitchShake 0.6s steps(1) both;
+}
+.mini-site.anim-glitch .ms-title::before,
+.mini-site.anim-glitch .ms-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  background: none;
+  -webkit-text-fill-color: initial;
+  pointer-events: none;
+  text-align: center;
+}
+.mini-site.anim-glitch .ms-title::before {
+  color: #ff10f0;
+  animation: glitchShake 0.6s steps(1) reverse both;
+  mix-blend-mode: screen;
+  text-shadow: 0 0 6px #ff10f0;
+}
+.mini-site.anim-glitch .ms-title::after {
+  color: #00f0ff;
+  animation: glitchShake 0.6s steps(1) both;
+  animation-delay: 0.05s;
+  mix-blend-mode: screen;
+  text-shadow: 0 0 6px #00f0ff;
+}
+
+/* 08 · TYPEWRITER — subtitle types itself */
+.mini-site.anim-type .ms-sub {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--ms-accent);
+  margin-left: auto;
+  margin-right: auto;
+  width: max-content;
+  max-width: 100%;
+  animation:
+    typewriter 2s steps(40, end) both,
+    typeCaret 0.7s step-end infinite;
+}
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: max-content; }
+}
+@keyframes typeCaret {
+  0%, 100% { border-color: var(--ms-accent); }
+  50%      { border-color: transparent; }
+}
+
+/* 09 · ZOOM IN — whole site scales from 0.5 with bounce */
+@keyframes zoomBounce {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+.mini-site.anim-zoom { animation: zoomBounce 0.7s var(--ease-spring) both; }
+
+/* 10 · NEON FLICKER — title flickers like a dying tube */
+@keyframes neonFlicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 0.99;
+    text-shadow:
+      0 0 4px var(--ms-accent),
+      0 0 12px var(--ms-accent),
+      0 0 24px var(--ms-accent);
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+    text-shadow: none;
+  }
+}
+.mini-site.anim-flicker .ms-title {
+  animation: neonFlicker 1.6s linear both;
+}
+
+/* Disable letter span splitting for non-letter animations */
+.mini-site:not(.anim-drop):not(.anim-wave) .ms-title .letter {
+  display: inline;
+  animation: none;
+}
 
 @media (min-width: 720px) {
   .lab { padding: 16px; gap: 20px; }
@@ -1319,6 +1642,10 @@ input[type="range"]#ratio::-moz-range-thumb {
     grid-template-columns: 1fr auto 1fr;
     gap: 20px;
     align-items: end;
+  }
+  .extras {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
   }
   .ratio-control { min-width: 220px; }
   .control-title { font-size: var(--fs-2xl); }

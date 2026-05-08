@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Audiowide&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Audiowide&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,800&family=Bungee&family=Playfair+Display:wght@400;700;900&family=Bebas+Neue&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="neon-nostalgia-favicon.svg">
 </head>
 <body>
@@ -86,18 +86,47 @@
 
     <div class="brand-input">
       <label for="brandName">// brand name in preview</label>
-      <input type="text" id="brandName" maxlength="32" value="RETROGRADE"
+      <input type="text" id="brandName" maxlength="32" value="Next Chapter"
              autocomplete="off" spellcheck="false">
       <small>Try your own name. Rendered with <code>textContent</code> — injection-safe.</small>
     </div>
 
+    <!-- ── 02 · THIRD LAYER: FONT + ANIMATION ── -->
+    <div class="layer-header">
+      <span class="kicker">// 02 add a third layer</span>
+      <p class="layer-sub">Override the fused font and apply an animation. Pick from 10 visual effects — click the preview to replay.</p>
+    </div>
+
+    <div class="extras">
+      <div class="selector" data-slot="font">
+        <label class="selector-label">Display <span class="big-letter">Font</span></label>
+        <button class="dropdown-trigger" id="triggerFont" aria-expanded="false" aria-haspopup="listbox">
+          <span class="dropdown-swatch dropdown-swatch-font" id="swatchFont" aria-hidden="true">Aa</span>
+          <span class="dropdown-current" id="currentFont">Auto (from fusion)</span>
+          <span class="dropdown-arrow" aria-hidden="true">▾</span>
+        </button>
+        <ul class="dropdown-menu" id="menuFont" role="listbox" aria-label="Display font"></ul>
+      </div>
+
+      <div class="selector" data-slot="anim">
+        <label class="selector-label">Animation <span class="big-letter">FX</span></label>
+        <button class="dropdown-trigger" id="triggerAnim" aria-expanded="false" aria-haspopup="listbox">
+          <span class="dropdown-swatch dropdown-swatch-anim" id="swatchAnim" aria-hidden="true">∿</span>
+          <span class="dropdown-current" id="currentAnim">None</span>
+          <span class="dropdown-arrow" aria-hidden="true">▾</span>
+        </button>
+        <ul class="dropdown-menu" id="menuAnim" role="listbox" aria-label="Animation"></ul>
+      </div>
+    </div>
+
     <div class="actions">
-      <button class="btn btn-primary" id="fuseBtn">
-        <span class="btn-label">▶ FUSE THEMES</span>
+      <button class="btn btn-primary" id="fuseBtn" aria-label="Play current animation">
+        <span class="btn-label">▶ PLAY ANIMATION</span>
         <span class="btn-shine" aria-hidden="true"></span>
       </button>
       <button class="btn btn-ghost" id="randomBtn">⚄ RANDOM</button>
       <button class="btn btn-ghost" id="copyBtn">⧉ COPY CSS</button>
+      <button class="btn btn-ghost" id="downloadBtn">⬇ DOWNLOAD ZIP</button>
     </div>
   </section>
 
@@ -107,6 +136,7 @@
       <div class="preview-chrome">
         <span class="dots"><i></i><i></i><i></i></span>
         <span class="preview-url" id="previewUrl">prism://retrograde/vapor+gameui</span>
+        <span class="preview-hint" id="previewHint" aria-hidden="true">click to replay ↻</span>
       </div>
 
       <div class="preview-stage" id="previewStage">
@@ -166,7 +196,7 @@
 
   <section class="tokenstrip neon-panel">
     <div class="ts-header">
-      <span class="kicker">// 02 generated tokens</span>
+      <span class="kicker">// 03 generated tokens</span>
       <h3>The fused palette</h3>
     </div>
     <div class="ts-row">
