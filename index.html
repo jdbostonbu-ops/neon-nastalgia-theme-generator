@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRISM // Theme Fusion Lab</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Audiowide&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── NEON ATMOSPHERE ── -->
+<div class="atmosphere" aria-hidden="true">
+  <div class="sun"></div>
+  <div class="grid-floor"></div>
+  <div class="stars"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+</div>
+
+<header class="topbar neon-panel">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">
+      <span class="chev chev-1"></span>
+      <span class="chev chev-2"></span>
+      <span class="chev chev-3"></span>
+    </div>
+    <div class="brand-text">
+      <h1 class="brand-name">PRISM</h1>
+      <p>// theme fusion lab · v0.1</p>
+    </div>
+  </div>
+  <nav class="topbar-meta">
+    <span class="status-dot"></span>
+    <span class="status-text">// online</span>
+  </nav>
+</header>
+
+<main class="lab">
+
+  <section class="control neon-panel">
+    <div class="control-header">
+      <span class="kicker">// 01 select two philosophies</span>
+      <h2 class="control-title">Choose <em>two</em> design philosophies. Press fuse. Watch them <em>blend</em>.</h2>
+      <p class="control-sub">A theme generator for software developers. Pick from 35+ design philosophies, blend them with adjustable ratio, and ship the generated CSS tokens.</p>
+    </div>
+
+    <div class="selectors">
+
+      <div class="selector" data-slot="a">
+        <label class="selector-label">Theme <span class="big-letter">A</span></label>
+        <button class="dropdown-trigger" id="triggerA" aria-expanded="false" aria-haspopup="listbox">
+          <span class="dropdown-swatch" id="swatchA" aria-hidden="true"></span>
+          <span class="dropdown-current" id="currentA">Vaporwave</span>
+          <span class="dropdown-arrow" aria-hidden="true">▾</span>
+        </button>
+        <ul class="dropdown-menu" id="menuA" role="listbox" aria-label="Theme A"></ul>
+      </div>
+
+      <div class="ratio-control">
+        <label class="ratio-label">
+          <span>// fusion ratio</span>
+          <output id="ratioOut">50 / 50</output>
+        </label>
+        <input type="range" id="ratio" min="0" max="100" value="50" step="5"
+               aria-label="Fusion ratio between theme A and theme B">
+        <div class="ratio-track-marks" aria-hidden="true">
+          <span>A pure</span><span>balanced</span><span>B pure</span>
+        </div>
+      </div>
+
+      <div class="selector" data-slot="b">
+        <label class="selector-label">Theme <span class="big-letter">B</span></label>
+        <button class="dropdown-trigger" id="triggerB" aria-expanded="false" aria-haspopup="listbox">
+          <span class="dropdown-swatch" id="swatchB" aria-hidden="true"></span>
+          <span class="dropdown-current" id="currentB">Game UI / HUD</span>
+          <span class="dropdown-arrow" aria-hidden="true">▾</span>
+        </button>
+        <ul class="dropdown-menu" id="menuB" role="listbox" aria-label="Theme B"></ul>
+      </div>
+
+    </div>
+
+    <div class="brand-input">
+      <label for="brandName">// brand name in preview</label>
+      <input type="text" id="brandName" maxlength="32" value="RETROGRADE"
+             autocomplete="off" spellcheck="false">
+      <small>Try your own name. Rendered with <code>textContent</code> — injection-safe.</small>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="fuseBtn">
+        <span class="btn-label">▶ FUSE THEMES</span>
+        <span class="btn-shine" aria-hidden="true"></span>
+      </button>
+      <button class="btn btn-ghost" id="randomBtn">⚄ RANDOM</button>
+      <button class="btn btn-ghost" id="copyBtn">⧉ COPY CSS</button>
+    </div>
+  </section>
+
+  <section class="split">
+
+    <div class="preview neon-panel" id="previewWrap">
+      <div class="preview-chrome">
+        <span class="dots"><i></i><i></i><i></i></span>
+        <span class="preview-url" id="previewUrl">prism://retrograde/vapor+gameui</span>
+      </div>
+
+      <div class="preview-stage" id="previewStage">
+        <article class="mini-site" id="miniSite">
+          <header class="ms-header">
+            <div class="ms-logo" id="msLogo">R</div>
+            <nav class="ms-nav">
+              <span>work</span><span>about</span><span>contact</span>
+            </nav>
+          </header>
+
+          <section class="ms-hero">
+            <span class="ms-kicker">Issue No. 01</span>
+            <h3 class="ms-title" id="msTitle">RETROGRADE</h3>
+            <p class="ms-sub" id="msSub">A studio of pattern, intention, and patient craft.</p>
+            <div class="ms-cta">
+              <button class="ms-btn ms-btn-primary">Begin →</button>
+              <button class="ms-btn ms-btn-ghost">Read more</button>
+            </div>
+          </section>
+
+          <section class="ms-cards">
+            <div class="ms-card">
+              <span class="ms-card-num">01</span>
+              <h4>Discovery</h4>
+              <p>Listen first. Map the territory before drawing the lines.</p>
+            </div>
+            <div class="ms-card">
+              <span class="ms-card-num">02</span>
+              <h4>Form</h4>
+              <p>Where typography and spacing carry the meaning.</p>
+            </div>
+            <div class="ms-card">
+              <span class="ms-card-num">03</span>
+              <h4>Ship</h4>
+              <p>The release is the beginning, not the end.</p>
+            </div>
+          </section>
+
+          <footer class="ms-footer">
+            <span id="msFooter">© RETROGRADE · Built with Prism</span>
+          </footer>
+        </article>
+      </div>
+    </div>
+
+    <aside class="codepanel neon-panel">
+      <div class="codepanel-tabs">
+        <button class="codetab active" data-tab="tokens">tokens.css</button>
+        <button class="codetab" data-tab="meta">meta.json</button>
+      </div>
+      <pre class="codeblock" id="codeBlock"><code id="codeOut"></code></pre>
+      <div class="copy-flash" id="copyFlash">// copied to clipboard</div>
+    </aside>
+
+  </section>
+
+  <section class="tokenstrip neon-panel">
+    <div class="ts-header">
+      <span class="kicker">// 02 generated tokens</span>
+      <h3>The fused palette</h3>
+    </div>
+    <div class="ts-row">
+      <div class="ts-block" id="tsBg">
+        <span class="ts-label">--bg</span>
+        <span class="ts-value" id="tsBgVal">#0e0e14</span>
+      </div>
+      <div class="ts-block" id="tsSurface">
+        <span class="ts-label">--surface</span>
+        <span class="ts-value" id="tsSurfaceVal">#1a1a24</span>
+      </div>
+      <div class="ts-block" id="tsAccent">
+        <span class="ts-label">--accent</span>
+        <span class="ts-value" id="tsAccentVal">#ff10f0</span>
+      </div>
+      <div class="ts-block" id="tsText">
+        <span class="ts-label">--text</span>
+        <span class="ts-value" id="tsTextVal">#f4f4f8</span>
+      </div>
+      <div class="ts-block ts-block-font" id="tsFont">
+        <span class="ts-label">--font</span>
+        <span class="ts-value" id="tsFontVal">Monoton</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>// PRISM · vanilla HTML · CSS · JavaScript · no libraries</p>
+    <p>// closure-based factory functions · <code>textContent</code> for user input · mobile-first</p>
+  </footer>
+
+</main>
+
+<script src="theme.js"></script>
+</body>
+</html>
