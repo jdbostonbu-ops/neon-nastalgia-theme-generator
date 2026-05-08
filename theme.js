@@ -1307,12 +1307,12 @@ function getAnimationCSSForExport(animClass) {
   overflow: hidden;
   white-space: nowrap;
   border-right: 2px solid var(--accent);
-  width: max-content;
+  width: 0;
   max-width: 100%;
   margin: 0 auto 24px;
-  animation: typewriter 2s steps(40, end) both, typeCaret 0.7s step-end infinite;
+  animation: typewriter 2.4s steps(var(--type-len, 40), end) forwards, typeCaret 0.7s step-end infinite;
 }
-@keyframes typewriter { from { width: 0; } to { width: max-content; } }
+@keyframes typewriter { from { width: 0; } to { width: calc(var(--type-len, 40) * 1ch); } }
 @keyframes typeCaret { 0%, 100% { border-color: var(--accent); } 50% { border-color: transparent; } }`,
         'anim-zoom': `
 @keyframes zoomBounce {
@@ -1360,6 +1360,17 @@ function buildStarterJS(animClass, brand) {
     span.style.animationDelay = (i * 80) + 'ms';
     title.appendChild(span);
   });
+})();
+`;
+    }
+
+    if (needsType) {
+        script += `// Typewriter — measure subtitle length so width can animate to the right size
+(function setupTypewriter() {
+  const sub = document.querySelector('.site-sub');
+  if (!sub) return;
+  const len = (sub.textContent || '').length;
+  sub.style.setProperty('--type-len', len);
 })();
 `;
     }
@@ -1609,6 +1620,9 @@ function playAnimation() {
         ms.classList.remove('is-clickable');
         const hint = document.getElementById('previewHint');
         if (hint) hint.classList.remove('visible');
+        // also clear typewriter measurement so a future switch back recalculates
+        const subElNone = document.getElementById('msSub');
+        if (subElNone) subElNone.style.removeProperty('--type-len');
         return;
     }
 
@@ -1633,6 +1647,19 @@ function playAnimation() {
     } else {
         removeCardBacks();
         wireCardFlipHandlers(false);
+    }
+
+    // For typewriter — measure subtitle length and set --type-len so the
+    // CSS animation reveals the correct number of characters (1ch per char)
+    if (anim.id === 'type') {
+        const subEl = document.getElementById('msSub');
+        if (subEl) {
+            const len = (subEl.textContent || '').length;
+            subEl.style.setProperty('--type-len', len);
+        }
+    } else {
+        const subEl = document.getElementById('msSub');
+        if (subEl) subEl.style.removeProperty('--type-len');
     }
 
     // Force reflow so the animation re-triggers cleanly

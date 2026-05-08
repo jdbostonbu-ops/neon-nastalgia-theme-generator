@@ -1581,22 +1581,23 @@ input[type="range"]#ratio::-moz-range-thumb {
   text-shadow: 0 0 6px #00f0ff;
 }
 
-/* 08 · TYPEWRITER — subtitle types itself */
+/* 08 · TYPEWRITER — subtitle types itself
+   --type-len is set inline by JS to the character count of the subtitle */
 .mini-site.anim-type .ms-sub {
   overflow: hidden;
   white-space: nowrap;
   border-right: 2px solid var(--ms-accent);
   margin-left: auto;
   margin-right: auto;
-  width: max-content;
+  width: 0;
   max-width: 100%;
   animation:
-    typewriter 2s steps(40, end) both,
+    typewriter 2.4s steps(var(--type-len, 40), end) forwards,
     typeCaret 0.7s step-end infinite;
 }
 @keyframes typewriter {
   from { width: 0; }
-  to   { width: max-content; }
+  to   { width: calc(var(--type-len, 40) * 1ch); }
 }
 @keyframes typeCaret {
   0%, 100% { border-color: var(--ms-accent); }
