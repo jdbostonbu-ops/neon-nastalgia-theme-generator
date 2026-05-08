@@ -7,7 +7,7 @@ This edition wears its **Neon Nostalgia** skin — a glowing magenta-and-orange 
 ## 👤 Author
 **Jacqueline**
 [Check out my GitHub Profile](https://github.com/jdbostonbu-ops)
-🚀 **[Visit the Showcase](https://jdbostonbu-ops.github.io/neon-nastalgia-theme-generator/)*
+🚀 **[Visit the Page](https://jdbostonbu-ops.github.io/neon-nastalgia-theme-generator/)*
 
 <p align="center">
   <img src="neon-nostalgia-favicon.svg" alt="Prism Neon Nostalgia Edition Demo" width="300">
